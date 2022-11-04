@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AssistanceCatergory {
+  id          Int          @id @default(autoincrement())
+  name        String
+  assistances Assistance[]
+}
+
+model Assistance {
+  id                   Int                 @id @default(autoincrement())
+  date                 DateTime
+  observations         String
+  assistanceCategoryId Int
+  courseId             Int
+  studentId            String
+  assistanceCategory   AssistanceCatergory @relation(fields: [assistanceCategoryId], references: [id])
+  course               Course              @relation(fields: [courseId], references: [id])
+  student              Student             @relation(fields: [studentId], references: [id])
+}
+
+model Student {
+  id      String  @id
+  name    String
+  email   String
+  faculty String?
+
+  courses     CourseOnStudent[]
+  device      Device?
+  assistances Assistance[]
+}
+
+model Course {
+  id          Int               @id @default(autoincrement())
+  name        String
+  section     Int
+  classTotal  Int               @default(0)
+  faculty     String
+  semester    String
+  professorId String
+  professor   Professor         @relation(fields: [professorId], references: [id])
+  students    CourseOnStudent[]
+  qrs         Qr[]
+  assistances Assistance[]
+}
+
+model CourseOnStudent {
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId String
+  course    Course  @relation(fields: [courseId], references: [id])
+  courseId  Int
+
+  @@id([studentId, courseId])
+}
+
+model Device {
+  id        String   @id
+  name      String
+  qrId      Int
+  studentId String?  @unique
+  qr        Qr       @relation(fields: [qrId], references: [id])
+  student   Student? @relation(fields: [studentId], references: [id])
+}
+
+model Professor {
+  id      String   @id
+  carnet  String
+  name    String
+  email   String
+  courses Course[]
+}
+
+model Qr {
+  id        Int      @id @default(autoincrement())
+  limitDate DateTime
+  latitude  Float
+  longitude Float
+  initDate  DateTime
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+  devices   Device[]
+}
