@@ -5,6 +5,9 @@ import CourseRoutes from "./routes/courses";
 import ProfessorRoutes from "./routes/professors";
 import StudentRoutes from "./routes/students";
 import DeviceRoutes from "./routes/devices";
+import QrRoutes from "./routes/qrs";
+import AssistancecatergoriesRoutes from "./routes/assistancecategories";
+import AssistsRoutes from "./routes/assists"
 import cors from 'cors'
 
 const app = express();
@@ -18,6 +21,9 @@ app.use(CourseRoutes);
 app.use(ProfessorRoutes);
 app.use(StudentRoutes);
 app.use(DeviceRoutes);
+app.use(QrRoutes);
+app.use(AssistancecatergoriesRoutes);
+app.use(AssistsRoutes);
 
 app.use((req, res, next) => {
   res.status(404);
