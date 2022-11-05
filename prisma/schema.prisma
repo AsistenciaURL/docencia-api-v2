@@ -59,13 +59,22 @@ model CourseOnStudent {
   @@id([studentId, courseId])
 }
 
+model DeviceOnQr {
+  device   Device @relation(fields: [deviceId], references: [id])
+  deviceId String
+  qr       Qr     @relation(fields: [qrId], references: [id])
+  qrId     Int
+  token     String @unique
+  used      Boolean @default(false)
+  
+  @@id([qrId, deviceId])
+}
+
 model Device {
-  id        String   @id
-  name      String
-  qrId      Int
-  studentId String?  @unique
-  qr        Qr       @relation(fields: [qrId], references: [id])
-  student   Student? @relation(fields: [studentId], references: [id])
+  id        String       @id
+  qrs       DeviceOnQr[]
+  studentId String?      @unique
+  student   Student?     @relation(fields: [studentId], references: [id])
 }
 
 model Professor {
@@ -77,12 +86,12 @@ model Professor {
 }
 
 model Qr {
-  id        Int      @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   limitDate DateTime
   latitude  Float
   longitude Float
   initDate  DateTime
   courseId  Int
-  course    Course   @relation(fields: [courseId], references: [id])
-  devices   Device[]
+  course    Course       @relation(fields: [courseId], references: [id])
+  devices   DeviceOnQr[]
 }

@@ -90,14 +90,20 @@ router.put("/qrs/:id", async (req, res) => {
 
 router.post("/qrs", async (req, res) => {
   try {
+    const data = req.body
     const result = await prisma.qr.create({
-      data: { ...req.body },
+      data: {
+        initDate: new Date(data.initDate),
+        limitDate: new Date(data.limitDate),
+        ...data
+      },
     });
     res.json({
       status: "success",
       data: result,
     });
   } catch (error) {
+    console.log(error)
     res.json({
       status: "error",
       message: error,

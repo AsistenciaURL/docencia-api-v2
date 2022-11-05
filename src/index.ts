@@ -8,6 +8,7 @@ import DeviceRoutes from "./routes/devices";
 import QrRoutes from "./routes/qrs";
 import AssistancecatergoriesRoutes from "./routes/assistancecategories";
 import AssistsRoutes from "./routes/assists"
+import ValidateRoutes from "./routes/validate"
 import cors from 'cors'
 
 const app = express();
@@ -24,6 +25,7 @@ app.use(DeviceRoutes);
 app.use(QrRoutes);
 app.use(AssistancecatergoriesRoutes);
 app.use(AssistsRoutes);
+app.use(ValidateRoutes);
 
 app.use((req, res, next) => {
   res.status(404);
