@@ -10,6 +10,7 @@ import AssistancecatergoriesRoutes from "./routes/assistanceCategories";
 import AssistanceRoutes from "./routes/assistances";
 import ValidateRoutes from "./routes/validate";
 import cors from "cors";
+require('dotenv').config()
 
 const app = express();
 
