@@ -60,13 +60,13 @@ model CourseOnStudent {
 }
 
 model DeviceOnQr {
-  device   Device @relation(fields: [deviceId], references: [id])
+  device   Device  @relation(fields: [deviceId], references: [id])
   deviceId String
-  qr       Qr     @relation(fields: [qrId], references: [id])
+  qr       Qr      @relation(fields: [qrId], references: [id])
   qrId     Int
-  token     String @unique
-  used      Boolean @default(false)
-  
+  token    String  @unique
+  used     Boolean @default(false)
+
   @@id([qrId, deviceId])
 }
 

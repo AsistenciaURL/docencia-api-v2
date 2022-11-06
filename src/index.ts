@@ -6,17 +6,19 @@ import ProfessorRoutes from "./routes/professors";
 import StudentRoutes from "./routes/students";
 import DeviceRoutes from "./routes/devices";
 import QrRoutes from "./routes/qrs";
-import AssistancecatergoriesRoutes from "./routes/assistancecategories";
-import AssistsRoutes from "./routes/assists"
-import ValidateRoutes from "./routes/validate"
-import cors from 'cors'
+import AssistancecatergoriesRoutes from "./routes/assistanceCategories";
+import AssistanceRoutes from "./routes/assistances";
+import ValidateRoutes from "./routes/validate";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:3000'
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://192.168.0.3:3000"],
+  })
+);
 
 app.use(CourseRoutes);
 app.use(ProfessorRoutes);
@@ -24,7 +26,7 @@ app.use(StudentRoutes);
 app.use(DeviceRoutes);
 app.use(QrRoutes);
 app.use(AssistancecatergoriesRoutes);
-app.use(AssistsRoutes);
+app.use(AssistanceRoutes);
 app.use(ValidateRoutes);
 
 app.use((req, res, next) => {
@@ -32,11 +34,11 @@ app.use((req, res, next) => {
   return res.json({
     success: false,
     data: null,
-    message: `API SAYS: Endpoint not found for path: ${req.path}`,
+    message: `Esta ruta no existe: ${req.path}`,
   });
 });
 
 // #6
 app.listen(8000, () =>
-  console.log("REST API server ready at: http://localhost:8000")
+  console.log("Servido escuchando en el la dirección: http://localhost:8000")
 );

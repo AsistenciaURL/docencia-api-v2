@@ -46,16 +46,19 @@ router.post("/validate/:id", async (req, res) => {
           data.latitude,
           data.longitude
         );
-        console.log(distance)
+        console.log(distance);
         if (distance <= 300) {
           const currentDate = new Date();
           // CAMBIAR EL MAYOR A MENOR
           if (currentDate < qr.limitDate) {
-            const isScanned = qr?.devices?.some(
+            const currentDeviceQr = qr?.devices?.find(
               (device) => device.deviceId === data.deviceId
             );
-            if (!isScanned) {
+            if (!currentDeviceQr) {
               const token = uuidv4();
+              console.log(Number(id));
+              console.log(data.deviceId);
+              console.log(token);
               await prisma.qr.update({
                 where: {
                   id: Number(id),
@@ -71,10 +74,20 @@ router.post("/validate/:id", async (req, res) => {
                   },
                 },
               });
+              console.log(token);
+              console.log(data.deviceId);
+              console.log("Validated QR");
               res.json({
                 status: "success",
                 message: "Validado",
                 data: token,
+              });
+              return 0;
+            } else if (!currentDeviceQr.used) {
+              res.json({
+                status: "success",
+                message: "Validado",
+                data: currentDeviceQr.token,
               });
               return 0;
             }
@@ -97,6 +110,7 @@ router.post("/validate/:id", async (req, res) => {
       message: "Invalid QR",
     });
   } catch (error) {
+    console.log(error);
     res.json({
       status: "error",
       message: error,
@@ -115,6 +129,10 @@ router.get("/token/:id", async (req, res) => {
     if (token.used === false) {
       res.json({
         status: "success",
+      });
+    } else if (token.used === true) {
+      res.json({
+        status: "used",
       });
     } else {
       res.json({

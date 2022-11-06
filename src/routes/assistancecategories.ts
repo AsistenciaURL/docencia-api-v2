@@ -4,19 +4,19 @@ import express from "express";
 const prisma = new PrismaClient();
 const router = express.Router();
 
-router.get("/assistancecategories", async (req, res) => {
-  const assistancecategory = await prisma.assistanceCatergory.findMany();
+router.get("/assistance-categories", async (req, res) => {
+  const assistanceCategory = await prisma.assistanceCatergory.findMany();
   res.json({
     status: "success",
-    data: assistancecategory,
+    data: assistanceCategory,
   });
 });
 
-router.get("/assistancecategories/:id", async (req, res) => {
+router.get("/assistance-categories/:id", async (req, res) => {
     try {
       const { id } = req.params;
       if (Number(id)) {
-        const assistancecategory = await prisma.assistanceCatergory.findUnique({
+        const assistanceCategory = await prisma.assistanceCatergory.findUnique({
           where: {
             id: Number(id),
           },
@@ -24,10 +24,10 @@ router.get("/assistancecategories/:id", async (req, res) => {
             assistances : true
           }
         });
-        if (assistancecategory) {
+        if (assistanceCategory) {
           res.json({
             status: "success",
-            data: assistancecategory,
+            data: assistanceCategory,
           });
         } else {
           res.json({
@@ -50,11 +50,11 @@ router.get("/assistancecategories/:id", async (req, res) => {
   });
   
 
-router.put("/assistancecategories/:id", async (req, res) => {
+router.put("/assistance-categories/:id", async (req, res) => {
   try {
     const { id } = req.params;
     if(Number( id )){
-        const assistancecategory = await prisma.assistanceCatergory.update({
+        const assistanceCategory = await prisma.assistanceCatergory.update({
           where: {
             id: Number(id),
           },
@@ -62,10 +62,10 @@ router.put("/assistancecategories/:id", async (req, res) => {
             ...req.body,
           },
         });
-        if (assistancecategory) {
+        if (assistanceCategory) {
           res.json({
             status: "success",
-            data: assistancecategory,
+            data: assistanceCategory,
           });
         } else {
           res.json({
@@ -87,7 +87,7 @@ router.put("/assistancecategories/:id", async (req, res) => {
   }
 });
 
-router.post("/assistancecategories", async (req, res) => {
+router.post("/assistance-categories", async (req, res) => {
   try {
     const result = await prisma.assistanceCatergory.create({
       data: { ...req.body },
