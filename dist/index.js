@@ -13,6 +13,7 @@ var assistanceCategories_1 = __importDefault(require("./routes/assistanceCategor
 var assistances_1 = __importDefault(require("./routes/assistances"));
 var validate_1 = __importDefault(require("./routes/validate"));
 var cors_1 = __importDefault(require("cors"));
+require('dotenv').config();
 var app = (0, express_1["default"])();
 app.use(express_1["default"].json());
 app.use((0, cors_1["default"])({
@@ -35,7 +36,7 @@ app.use(function (req, res, next) {
     });
 });
 // #6
-app.listen(8000, function () {
-    return console.log("Servido escuchando en el la dirección: http://localhost:8000");
+app.listen(process.env.PORT || 8000, function () {
+    return console.log("Servido escuchando en el la dirección: http://localhost:" + process.env.PORT);
 });
 //# sourceMappingURL=index.js.map
