@@ -35,4 +35,21 @@ router.get("/professors/:id", async (req, res) => {
   }
 });
 
+router.post("/professors", async (req, res) => {
+  try {
+    const result = await prisma.professor.create({
+      data: { ...req.body },
+    });
+    res.json({
+      status: "success",
+      data: result,
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error,
+    });
+  }
+});
+
 export default router;

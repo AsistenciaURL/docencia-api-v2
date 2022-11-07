@@ -121,6 +121,7 @@ router.put("/courses/add-class/:id", async (req, res) => {
 });
 
 router.post("/courses", async (req, res) => {
+  console.log(req.body)
   try {
     const result = await prisma.course.create({
       data: { ...req.body },
@@ -130,6 +131,7 @@ router.post("/courses", async (req, res) => {
       data: result,
     });
   } catch (error) {
+    console.log(error)
     res.json({
       status: "error",
       message: error,

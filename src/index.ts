@@ -40,6 +40,6 @@ app.use((req, res, next) => {
 });
 
 // #6
-app.listen(process.env.PORT || 8000, () =>
-  console.log("Servido escuchando en el la dirección: http://localhost:" + process.env.PORT)
+app.listen(8000, () =>
+  console.log("Servido escuchando en el la dirección: http://localhost:" + 8000)
 );

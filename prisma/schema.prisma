@@ -20,9 +20,11 @@ model Assistance {
   assistanceCategoryId Int
   courseId             Int
   studentId            String
+  qrId                 Int
   assistanceCategory   AssistanceCatergory @relation(fields: [assistanceCategoryId], references: [id])
   course               Course              @relation(fields: [courseId], references: [id])
   student              Student             @relation(fields: [studentId], references: [id])
+  qr                   Qr                  @relation(fields: [qrId], references: [id])
 }
 
 model Student {
@@ -86,12 +88,13 @@ model Professor {
 }
 
 model Qr {
-  id        Int          @id @default(autoincrement())
-  limitDate DateTime
-  latitude  Float
-  longitude Float
-  initDate  DateTime
-  courseId  Int
-  course    Course       @relation(fields: [courseId], references: [id])
-  devices   DeviceOnQr[]
+  id          Int          @id @default(autoincrement())
+  limitDate   DateTime
+  latitude    Float
+  longitude   Float
+  initDate    DateTime
+  courseId    Int
+  course      Course       @relation(fields: [courseId], references: [id])
+  devices     DeviceOnQr[]
+  assistances Assistance[]
 }
