@@ -26,6 +26,7 @@ router.get("/courses/:id", async (req, res) => {
               student: true,
             },
           },
+          qrs: true
         },
       });
       if (course) {

@@ -51,6 +51,46 @@ router.get("/assistances/:id", async (req, res) => {
   }
 });
 
+router.get("/assistances-with-qr/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (Number(id)) {
+      const assistance = await prisma.assistance.findMany({
+        where: {
+          qrId: Number(id),
+        },
+        include: {
+          student: true,
+          course: true,
+          assistanceCategory: true,
+        },
+      });
+      if (assistance) {
+        res.json({
+          status: "success",
+          data: assistance,
+        });
+      } else {
+        res.json({
+          status: "error",
+          message: "Not found",
+        });
+      }
+    } else {
+      res.json({
+        status: "error",
+        message: "Invalid id",
+      });
+    }
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error,
+    });
+  }
+});
+
+
 router.put("/assistances/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -98,6 +138,7 @@ router.post("/assistances", async (req, res) => {
       data: result,
     });
   } catch (error) {
+    console.log(error);
     res.json({
       status: "error",
       message: error,
@@ -113,8 +154,8 @@ router.post("/assist/:token", async (req, res) => {
         token: token,
       },
       data: {
-        used: true
-      }
+        used: true,
+      },
     });
     if (deviceOnQr) {
       res.json({
@@ -128,6 +169,7 @@ router.post("/assist/:token", async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.json({
       status: "error",
       message: error,
