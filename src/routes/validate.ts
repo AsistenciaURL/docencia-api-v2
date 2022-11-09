@@ -46,6 +46,10 @@ router.post("/validate/:id", async (req, res) => {
           data.latitude,
           data.longitude
         );
+        console.log(qr.latitude)
+        console.log(qr.longitude)
+        console.log(data.latitude)
+        console.log(data.longitude)
         console.log(distance);
         if (distance <= 1000) {
           const currentDate = new Date();

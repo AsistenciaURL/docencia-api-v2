@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import express from "express";
+import express, { query } from "express";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -13,72 +13,79 @@ router.get("/qrs", async (req, res) => {
 });
 
 router.get("/qrs/:id", async (req, res) => {
-    try {
-      const { id } = req.params;
-      if (Number(id)) {
-        const qr = await prisma.qr.findUnique({
-          where: {
-            id: Number(id),
+  try {
+    const { id } = req.params;
+    if (Number(id)) {
+      const qr = await prisma.qr.findUnique({
+        where: {
+          id: Number(id),
+        },
+        include: {
+          course: true,
+          devices: {
+            include: {
+              device: {
+                include: {
+                  student: true
+                }
+              }
+            }
           },
-          include:{
-            course : true,
-            devices : true,
-          }
+        },
+      });
+      if (qr) {
+        res.json({
+          status: "success",
+          data: qr,
         });
-        if (qr) {
-          res.json({
-            status: "success",
-            data: qr,
-          });
-        } else {
-          res.json({
-            status: "error",
-            message: "Not found",
-          });
-        }
       } else {
         res.json({
           status: "error",
-          message: "Invalid id",
+          message: "Not found",
         });
       }
-    } catch (error) {
+    } else {
       res.json({
         status: "error",
-        message: error,
+        message: "Invalid id",
       });
     }
-  });
-  
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error,
+    });
+  }
+});
 
 router.put("/qrs/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    if(Number( id )){
-        const qr = await prisma.qr.update({
-          where: {
-            id: Number(id),
-          },
-          data: {
-            ...req.body,
-          },
-        });
-        if (qr) {
-          res.json({
-            status: "success",
-            data: qr,
-          });
-        } else {
-          res.json({
-            status: "error",
-            message: "Not found",
-          });
-        }
-    }else{
+    if (Number(id)) {
+      const qr = await prisma.qr.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          ...req.body,
+        },
+      });
+      if (qr) {
         res.json({
-            status: "error",
-            message: "Invalid id",
-          });  
+          status: "success",
+          data: qr,
+        });
+      } else {
+        res.json({
+          status: "error",
+          message: "Not found",
+        });
+      }
+    } else {
+      res.json({
+        status: "error",
+        message: "Invalid id",
+      });
     }
   } catch (error) {
     res.json({
@@ -90,12 +97,20 @@ router.put("/qrs/:id", async (req, res) => {
 
 router.post("/qrs", async (req, res) => {
   try {
-    const data = req.body
+    const data = req.body;
     const result = await prisma.qr.create({
       data: {
         initDate: new Date(data.initDate),
         limitDate: new Date(data.limitDate),
-        ...data
+        ...data,
+      },
+    });
+    await prisma.course.update({
+      where: {
+        id: result.courseId,
+      },
+      data: {
+        classTotal: { increment: 1 },
       },
     });
     res.json({
@@ -103,7 +118,7 @@ router.post("/qrs", async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.json({
       status: "error",
       message: error,

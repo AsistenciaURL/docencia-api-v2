@@ -20,11 +20,13 @@ model Assistance {
   assistanceCategoryId Int
   courseId             Int
   studentId            String
-  qrId                 Int
+  qrId                 Int    
   assistanceCategory   AssistanceCatergory @relation(fields: [assistanceCategoryId], references: [id])
   course               Course              @relation(fields: [courseId], references: [id])
   student              Student             @relation(fields: [studentId], references: [id])
   qr                   Qr                  @relation(fields: [qrId], references: [id])
+
+  @@index([qrId])
 }
 
 model Student {
