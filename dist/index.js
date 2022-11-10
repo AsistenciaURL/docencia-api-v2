@@ -17,7 +17,7 @@ require('dotenv').config();
 var app = (0, express_1["default"])();
 app.use(express_1["default"].json());
 app.use((0, cors_1["default"])({
-    origin: ["http://localhost:3000", "http://192.168.0.3:3000", "http://192.168.0.7:3000", "https://docencia-web-csjadaox0-tatobig.vercel.app/", "https://docencia-web-wip.vercel.app/"]
+    origin: "https://docencia-web-wip.vercel.app/"
 }));
 app.use(courses_1["default"]);
 app.use(professors_1["default"]);
