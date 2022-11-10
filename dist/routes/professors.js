@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -79,6 +90,33 @@ router.get("/professors/:id", function (req, res) { return __awaiter(void 0, voi
                 res.json({
                     status: "error",
                     message: error_1
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/professors", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, prisma.professor.create({
+                        data: __assign({}, req.body)
+                    })];
+            case 1:
+                result = _a.sent();
+                res.json({
+                    status: "success",
+                    data: result
+                });
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                res.json({
+                    status: "error",
+                    message: error_2
                 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

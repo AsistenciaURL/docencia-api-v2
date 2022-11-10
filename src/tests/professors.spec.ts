@@ -7,7 +7,6 @@ describe("GET/professors", () => {
         test("Debe retornar estados success y todos los profesores.",  async() => {
                 const response = await request(app).get("/professors");
                 const data = await response.body
-                console.log(data);
                 expect(data.status).toEqual("success")
         });
 });

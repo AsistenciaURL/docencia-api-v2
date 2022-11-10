@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://192.168.0.3:3000", "http://192.168.0.7:3000"],
+    origin: ["http://localhost:3000", "http://192.168.0.3:3000", "http://192.168.0.7:3000", "https://docencia-web-csjadaox0-tatobig.vercel.app/", "https://docencia-web-wip.vercel.app/"],
   })
 );
 

@@ -6,7 +6,6 @@ describe("GET/qrs", () => {
         test("Debe retornar estados success y todos los qrs.",  async() => {
                 const response = await request(app).get("/qrs");
                 const data = await response.body
-                console.log(data);
                 expect(data.status).toEqual("success")
         });
 });

@@ -86,7 +86,8 @@ router.get("/courses/:id", function (req, res) { return __awaiter(void 0, void 0
                                 include: {
                                     student: true
                                 }
-                            }
+                            },
+                            qrs: true
                         }
                     })];
             case 1:
@@ -215,25 +216,29 @@ router.post("/courses", function (req, res) { return __awaiter(void 0, void 0, v
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                console.log(req.body);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, prisma.course.create({
                         data: __assign({}, req.body)
                     })];
-            case 1:
+            case 2:
                 result = _a.sent();
                 res.json({
                     status: "success",
                     data: result
                 });
-                return [3 /*break*/, 3];
-            case 2:
+                return [3 /*break*/, 4];
+            case 3:
                 error_4 = _a.sent();
+                console.log(error_4);
                 res.json({
                     status: "error",
                     message: error_4
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

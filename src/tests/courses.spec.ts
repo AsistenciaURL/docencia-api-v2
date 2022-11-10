@@ -7,7 +7,6 @@ describe("GET/courses", () => {
         test("Debe retornar estados success y todos los cursos.",  async() => {
                 const response = await request(app).get("/courses");
                 const data = await response.body
-                console.log(data);
                 expect(data.status).toEqual("success")
         });
 });

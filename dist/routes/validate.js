@@ -82,8 +82,12 @@ router.post("/validate/:id", function (req, res) { return __awaiter(void 0, void
                 qr = _b.sent();
                 if (!qr) return [3 /*break*/, 6];
                 distance = getDistance(qr.latitude, qr.longitude, data.latitude, data.longitude);
+                console.log(qr.latitude);
+                console.log(qr.longitude);
+                console.log(data.latitude);
+                console.log(data.longitude);
                 console.log(distance);
-                if (!(distance <= 300)) return [3 /*break*/, 5];
+                if (!(distance <= 1000)) return [3 /*break*/, 5];
                 currentDate = new Date();
                 if (!(currentDate < qr.limitDate)) return [3 /*break*/, 5];
                 currentDeviceQr = (_a = qr === null || qr === void 0 ? void 0 : qr.devices) === null || _a === void 0 ? void 0 : _a.find(function (device) { return device.deviceId === data.deviceId; });

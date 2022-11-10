@@ -6,7 +6,6 @@ describe("GET/devices", () => {
         test("Debe retornar estados success y todos los devices.",  async() => {
                 const response = await request(app).get("/devices");
                 const data = await response.body
-                console.log(data);
                 expect(data.status).toEqual("success")
         });
 });

@@ -83,7 +83,15 @@ router.get("/qrs/:id", function (req, res) { return __awaiter(void 0, void 0, vo
                         },
                         include: {
                             course: true,
-                            devices: true
+                            devices: {
+                                include: {
+                                    device: {
+                                        include: {
+                                            student: true
+                                        }
+                                    }
+                                }
+                            }
                         }
                     })];
             case 1:
@@ -171,27 +179,37 @@ router.post("/qrs", function (req, res) { return __awaiter(void 0, void 0, void 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 data = req.body;
                 return [4 /*yield*/, prisma.qr.create({
                         data: __assign({ initDate: new Date(data.initDate), limitDate: new Date(data.limitDate) }, data)
                     })];
             case 1:
                 result = _a.sent();
+                return [4 /*yield*/, prisma.course.update({
+                        where: {
+                            id: result.courseId
+                        },
+                        data: {
+                            classTotal: { increment: 1 }
+                        }
+                    })];
+            case 2:
+                _a.sent();
                 res.json({
                     status: "success",
                     data: result
                 });
-                return [3 /*break*/, 3];
-            case 2:
+                return [3 /*break*/, 4];
+            case 3:
                 error_3 = _a.sent();
                 console.log(error_3);
                 res.json({
                     status: "error",
                     message: error_3
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
