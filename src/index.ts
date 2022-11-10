@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://docencia-web-wip.vercel.app/",
+    origin: "https://docencia-web-csjadaox0-tatobig.vercel.app/",
   })
 );
 
