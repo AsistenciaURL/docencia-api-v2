@@ -17,7 +17,7 @@ require('dotenv').config();
 var app = (0, express_1["default"])();
 app.use(express_1["default"].json());
 app.use((0, cors_1["default"])({
-    origin: "https://docencia-web-csjadaox0-tatobig.vercel.app/"
+    origin: "*"
 }));
 app.use(courses_1["default"]);
 app.use(professors_1["default"]);
