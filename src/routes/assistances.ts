@@ -90,6 +90,39 @@ router.get("/assistances-with-qr/:id", async (req, res) => {
   }
 });
 
+router.get("/assistances-with-studentId/:id/:courseId", async (req, res) => {
+  try {
+    const { id, courseId } = req.params;
+    const assistance = await prisma.assistance.findMany({
+      where: {
+        studentId: id,
+        courseId: Number(courseId)
+      },
+      include: {
+        student: true,
+        course: true,
+        assistanceCategory: true,
+      },
+    });
+    if (assistance) {
+      res.json({
+        status: "success",
+        data: assistance,
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Not found",
+      });
+    }
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error,
+    });
+  }
+});
+
 router.put("/assistances/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -164,6 +197,19 @@ router.post("/assist/:token", async (req, res) => {
     });
     if (deviceOnQr) {
       const data: Assist = req.body;
+      await prisma.courseOnStudent.updateMany({
+        where: {
+          AND: [
+            { courseId: data.courseId },
+            {
+              studentId: data.studentId,
+            },
+          ],
+        },
+        data: {
+          assistances: { increment: 1 },
+        },
+      });
       await prisma.assistance.updateMany({
         where: {
           AND: [
