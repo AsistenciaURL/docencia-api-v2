@@ -59,6 +59,7 @@ model CourseOnStudent {
   studentId String
   course    Course  @relation(fields: [courseId], references: [id])
   courseId  Int
+  status    String  @default("Asignado")
 
   @@id([studentId, courseId])
 }

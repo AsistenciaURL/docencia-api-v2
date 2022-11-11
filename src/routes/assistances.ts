@@ -90,7 +90,6 @@ router.get("/assistances-with-qr/:id", async (req, res) => {
   }
 });
 
-
 router.put("/assistances/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -146,6 +145,12 @@ router.post("/assistances", async (req, res) => {
   }
 });
 
+type Assist = {
+  courseId: number;
+  studentId: string;
+  qrId: number;
+};
+
 router.post("/assist/:token", async (req, res) => {
   try {
     const { token } = req.params;
@@ -158,6 +163,25 @@ router.post("/assist/:token", async (req, res) => {
       },
     });
     if (deviceOnQr) {
+      const data: Assist = req.body;
+      await prisma.assistance.updateMany({
+        where: {
+          AND: [
+            {
+              qrId: data.qrId,
+            },
+            {
+              courseId: data.courseId,
+            },
+            {
+              studentId: data.studentId,
+            },
+          ],
+        },
+        data: {
+          assistanceCategoryId: 1,
+        },
+      });
       res.json({
         status: "success",
         data: deviceOnQr,

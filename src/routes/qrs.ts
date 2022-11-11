@@ -26,10 +26,10 @@ router.get("/qrs/:id", async (req, res) => {
             include: {
               device: {
                 include: {
-                  student: true
-                }
-              }
-            }
+                  student: true,
+                },
+              },
+            },
           },
         },
       });
@@ -105,7 +105,7 @@ router.post("/qrs", async (req, res) => {
         ...data,
       },
     });
-    await prisma.course.update({
+    const updatedCourse = await prisma.course.update({
       where: {
         id: result.courseId,
       },
@@ -113,6 +113,27 @@ router.post("/qrs", async (req, res) => {
         classTotal: { increment: 1 },
       },
     });
+
+    const courseOnStudent = await prisma.courseOnStudent.findMany({
+      where: {
+        courseId: updatedCourse.id
+      },
+    });
+    for (const courseStudent of courseOnStudent) {
+      if (courseStudent.status === "Asignado") {
+        await prisma.assistance.create({
+          data: {
+            date: result.initDate,
+            observations: "Ninguna",
+            assistanceCategoryId: 2,
+            studentId: courseStudent.studentId,
+            courseId: updatedCourse.id,
+            qrId: result.id,
+          },
+        });
+      }
+    }
+
     res.json({
       status: "success",
       data: result,

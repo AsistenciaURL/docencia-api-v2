@@ -116,4 +116,34 @@ router.post("/assign/:id", async (req, res) => {
   }
 });
 
+router.post("/unassign/", async (req, res) => {
+  try {
+    const { courseId, studentId } = req.body;
+    const result = await prisma.courseOnStudent.updateMany({
+      where: {
+        AND: [
+          {
+            courseId: courseId,
+          },
+          {
+            studentId: studentId
+          }
+        ]
+      },
+      data: {
+        status: 'Desasignado'
+      },
+    });
+    res.json({
+      status: "success",
+      data: result,
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error,
+    });
+  }
+});
+
 export default router;
