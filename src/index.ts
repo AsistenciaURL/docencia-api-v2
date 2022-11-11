@@ -5,7 +5,7 @@ import ProfessorRoutes from "./routes/professors";
 import StudentRoutes from "./routes/students";
 import DeviceRoutes from "./routes/devices";
 import QrRoutes from "./routes/qrs";
-import AssistancecatergoriesRoutes from "./routes/assistanceCategories";
+import AssistancecatergoriesRoutes from "./routes/assistancecategories";
 import AssistanceRoutes from "./routes/assistances";
 import ValidateRoutes from "./routes/validate";
 import cors from "cors";

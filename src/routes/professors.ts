@@ -4,6 +4,14 @@ import express from "express";
 const prisma = new PrismaClient();
 const router = express.Router();
 
+router.get("/professors", async (req, res) => {
+  const professor = await prisma.professor.findMany();
+  res.json({
+    status: "success",
+    data: professor,
+  });
+});
+
 router.get("/professors/:id", async (req, res) => {
   try {
     const { id } = req.params;
