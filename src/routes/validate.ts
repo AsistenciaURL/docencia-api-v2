@@ -51,7 +51,7 @@ router.post("/validate/:id", async (req, res) => {
         console.log(data.latitude)
         console.log(data.longitude)
         console.log(distance);
-        if (distance <= 1000) {
+        if (distance <= 100000000) {
           const currentDate = new Date();
           // CAMBIAR EL MAYOR A MENOR
           if (currentDate < qr.limitDate) {
