@@ -5,7 +5,11 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 router.get("/courses", async (req, res) => {
-  const course = await prisma.course.findMany();
+  const course = await prisma.course.findMany({
+    include: {
+      students: true
+    }
+  });
   res.json({
     status: "success",
     data: course,
