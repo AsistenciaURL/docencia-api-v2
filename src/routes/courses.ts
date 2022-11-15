@@ -25,6 +25,7 @@ router.get("/courses/:id", async (req, res) => {
           id: Number(id),
         },
         include: {
+          professor: true,
           students: {
             include: {
               student: true,
