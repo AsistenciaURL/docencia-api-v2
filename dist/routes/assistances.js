@@ -171,8 +171,52 @@ router.get("/assistances-with-qr/:id", function (req, res) { return __awaiter(vo
         }
     });
 }); });
+router.get("/assistances-with-studentId/:id/:courseId", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, courseId, assistance, error_3;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.params, id = _a.id, courseId = _a.courseId;
+                return [4 /*yield*/, prisma.assistance.findMany({
+                        where: {
+                            studentId: id,
+                            courseId: Number(courseId)
+                        },
+                        include: {
+                            student: true,
+                            course: true,
+                            assistanceCategory: true
+                        }
+                    })];
+            case 1:
+                assistance = _b.sent();
+                if (assistance) {
+                    res.json({
+                        status: "success",
+                        data: assistance
+                    });
+                }
+                else {
+                    res.json({
+                        status: "error",
+                        message: "Not found"
+                    });
+                }
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _b.sent();
+                res.json({
+                    status: "error",
+                    message: error_3
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 router.put("/assistances/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, assistance, error_3;
+    var id, assistance, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -208,10 +252,10 @@ router.put("/assistances/:id", function (req, res) { return __awaiter(void 0, vo
                 _a.label = 3;
             case 3: return [3 /*break*/, 5];
             case 4:
-                error_3 = _a.sent();
+                error_4 = _a.sent();
                 res.json({
                     status: "error",
-                    message: error_3
+                    message: error_4
                 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
@@ -219,7 +263,7 @@ router.put("/assistances/:id", function (req, res) { return __awaiter(void 0, vo
     });
 }); });
 router.post("/assistances", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, error_4;
+    var result, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -235,11 +279,11 @@ router.post("/assistances", function (req, res) { return __awaiter(void 0, void 
                 });
                 return [3 /*break*/, 3];
             case 2:
-                error_4 = _a.sent();
-                console.log(error_4);
+                error_5 = _a.sent();
+                console.log(error_5);
                 res.json({
                     status: "error",
-                    message: error_4
+                    message: error_5
                 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
@@ -247,11 +291,11 @@ router.post("/assistances", function (req, res) { return __awaiter(void 0, void 
     });
 }); });
 router.post("/assist/:token", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var token, deviceOnQr, error_5;
+    var token, deviceOnQr, data, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 6, , 7]);
                 token = req.params.token;
                 return [4 /*yield*/, prisma.deviceOnQr.update({
                         where: {
@@ -263,28 +307,64 @@ router.post("/assist/:token", function (req, res) { return __awaiter(void 0, voi
                     })];
             case 1:
                 deviceOnQr = _a.sent();
-                if (deviceOnQr) {
-                    res.json({
-                        status: "success",
-                        data: deviceOnQr
-                    });
-                }
-                else {
-                    res.json({
-                        status: "error",
-                        message: "Not found"
-                    });
-                }
-                return [3 /*break*/, 3];
+                if (!deviceOnQr) return [3 /*break*/, 4];
+                data = req.body;
+                return [4 /*yield*/, prisma.courseOnStudent.updateMany({
+                        where: {
+                            AND: [
+                                { courseId: data.courseId },
+                                {
+                                    studentId: data.studentId
+                                },
+                            ]
+                        },
+                        data: {
+                            assistances: { increment: 1 }
+                        }
+                    })];
             case 2:
-                error_5 = _a.sent();
-                console.log(error_5);
+                _a.sent();
+                return [4 /*yield*/, prisma.assistance.updateMany({
+                        where: {
+                            AND: [
+                                {
+                                    qrId: data.qrId
+                                },
+                                {
+                                    courseId: data.courseId
+                                },
+                                {
+                                    studentId: data.studentId
+                                },
+                            ]
+                        },
+                        data: {
+                            assistanceCategoryId: 1
+                        }
+                    })];
+            case 3:
+                _a.sent();
+                res.json({
+                    status: "success",
+                    data: deviceOnQr
+                });
+                return [3 /*break*/, 5];
+            case 4:
                 res.json({
                     status: "error",
-                    message: error_5
+                    message: "Not found"
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                _a.label = 5;
+            case 5: return [3 /*break*/, 7];
+            case 6:
+                error_6 = _a.sent();
+                console.log(error_6);
+                res.json({
+                    status: "error",
+                    message: error_6
+                });
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); });

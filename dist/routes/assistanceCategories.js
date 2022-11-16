@@ -193,4 +193,4 @@ router.post("/assistance-categories", function (req, res) { return __awaiter(voi
     });
 }); });
 exports["default"] = router;
-//# sourceMappingURL=assistanceCategories.js.map
+//# sourceMappingURL=assistancecategories.js.map

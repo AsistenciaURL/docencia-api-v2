@@ -9,7 +9,7 @@ var professors_1 = __importDefault(require("./routes/professors"));
 var students_1 = __importDefault(require("./routes/students"));
 var devices_1 = __importDefault(require("./routes/devices"));
 var qrs_1 = __importDefault(require("./routes/qrs"));
-var assistanceCategories_1 = __importDefault(require("./routes/assistanceCategories"));
+var assistancecategories_1 = __importDefault(require("./routes/assistancecategories"));
 var assistances_1 = __importDefault(require("./routes/assistances"));
 var validate_1 = __importDefault(require("./routes/validate"));
 var cors_1 = __importDefault(require("cors"));
@@ -24,7 +24,7 @@ app.use(professors_1["default"]);
 app.use(students_1["default"]);
 app.use(devices_1["default"]);
 app.use(qrs_1["default"]);
-app.use(assistanceCategories_1["default"]);
+app.use(assistancecategories_1["default"]);
 app.use(assistances_1["default"]);
 app.use(validate_1["default"]);
 app.use(function (req, res, next) {
@@ -35,9 +35,8 @@ app.use(function (req, res, next) {
         message: "Esta ruta no existe: ".concat(req.path)
     });
 });
-// #6
 app.listen(process.env.PORT, function () {
-    return console.log("Servido escuchando en el la dirección: http://localhost:" + 8000);
+    return console.log("Servido escuchando en el la dirección: http://localhost:" + process.env.PORT);
 });
 exports["default"] = app;
 //# sourceMappingURL=index.js.map

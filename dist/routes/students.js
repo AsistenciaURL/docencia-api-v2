@@ -213,5 +213,110 @@ router.post("/assign/:id", function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+router.post("/unassign/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, courseId, studentId, result, error_5;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, courseId = _a.courseId, studentId = _a.studentId;
+                return [4 /*yield*/, prisma.courseOnStudent.updateMany({
+                        where: {
+                            AND: [
+                                {
+                                    courseId: courseId
+                                },
+                                {
+                                    studentId: studentId
+                                },
+                            ]
+                        },
+                        data: {
+                            status: "Desasignado"
+                        }
+                    })];
+            case 1:
+                result = _b.sent();
+                res.json({
+                    status: "success",
+                    data: result
+                });
+                return [3 /*break*/, 3];
+            case 2:
+                error_5 = _b.sent();
+                res.json({
+                    status: "error",
+                    message: error_5
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/assign-existing/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, studentId, courseId, existingStudent, courseOnStudent, newCourseOnStudent, error_6;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 4, , 5]);
+                _a = req.body, studentId = _a.studentId, courseId = _a.courseId;
+                return [4 /*yield*/, prisma.student.findUnique({
+                        where: {
+                            id: studentId
+                        }
+                    })];
+            case 1:
+                existingStudent = _b.sent();
+                if (existingStudent === null) {
+                    throw ("Este carnet no pertece a un estudiante registrado en el sistema.");
+                }
+                return [4 /*yield*/, prisma.courseOnStudent.findUnique({
+                        where: {
+                            studentId_courseId: {
+                                courseId: Number(courseId),
+                                studentId: studentId
+                            }
+                        }
+                    })];
+            case 2:
+                courseOnStudent = _b.sent();
+                if (courseOnStudent !== null) {
+                    throw ("El estudiante ya esta fue asignado al curso.");
+                }
+                return [4 /*yield*/, prisma.student.update({
+                        where: {
+                            id: studentId
+                        },
+                        data: {
+                            courses: {
+                                create: [
+                                    {
+                                        courseId: Number(courseId)
+                                    },
+                                ]
+                            }
+                        }
+                    })];
+            case 3:
+                newCourseOnStudent = _b.sent();
+                if (newCourseOnStudent) {
+                    res.json({
+                        status: "success",
+                        message: "Estudiante asignado correctamente."
+                    });
+                }
+                return [3 /*break*/, 5];
+            case 4:
+                error_6 = _b.sent();
+                console.log(error_6);
+                res.json({
+                    status: "error",
+                    message: error_6
+                });
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); });
 exports["default"] = router;
 //# sourceMappingURL=students.js.map

@@ -54,6 +54,21 @@ var client_1 = require("@prisma/client");
 var express_1 = __importDefault(require("express"));
 var prisma = new client_1.PrismaClient();
 var router = express_1["default"].Router();
+router.get("/professors", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var professor;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, prisma.professor.findMany()];
+            case 1:
+                professor = _a.sent();
+                res.json({
+                    status: "success",
+                    data: professor
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
 router.get("/professors/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, professor, error_1;
     return __generator(this, function (_a) {

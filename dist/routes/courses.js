@@ -58,7 +58,11 @@ router.get("/courses", function (req, res) { return __awaiter(void 0, void 0, vo
     var course;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, prisma.course.findMany()];
+            case 0: return [4 /*yield*/, prisma.course.findMany({
+                    include: {
+                        students: true
+                    }
+                })];
             case 1:
                 course = _a.sent();
                 res.json({
@@ -82,6 +86,7 @@ router.get("/courses/:id", function (req, res) { return __awaiter(void 0, void 0
                             id: Number(id)
                         },
                         include: {
+                            professor: true,
                             students: {
                                 include: {
                                     student: true

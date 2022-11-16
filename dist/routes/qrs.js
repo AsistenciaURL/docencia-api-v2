@@ -175,11 +175,11 @@ router.put("/qrs/:id", function (req, res) { return __awaiter(void 0, void 0, vo
     });
 }); });
 router.post("/qrs", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var data, result, error_3;
+    var data, result, updatedCourse, courseOnStudent, _i, courseOnStudent_1, courseStudent, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 8, , 9]);
                 data = req.body;
                 return [4 /*yield*/, prisma.qr.create({
                         data: __assign({ initDate: new Date(data.initDate), limitDate: new Date(data.limitDate) }, data)
@@ -195,21 +195,51 @@ router.post("/qrs", function (req, res) { return __awaiter(void 0, void 0, void 
                         }
                     })];
             case 2:
+                updatedCourse = _a.sent();
+                return [4 /*yield*/, prisma.courseOnStudent.findMany({
+                        where: {
+                            courseId: updatedCourse.id
+                        }
+                    })];
+            case 3:
+                courseOnStudent = _a.sent();
+                _i = 0, courseOnStudent_1 = courseOnStudent;
+                _a.label = 4;
+            case 4:
+                if (!(_i < courseOnStudent_1.length)) return [3 /*break*/, 7];
+                courseStudent = courseOnStudent_1[_i];
+                if (!(courseStudent.status === "Asignado")) return [3 /*break*/, 6];
+                return [4 /*yield*/, prisma.assistance.create({
+                        data: {
+                            date: result.initDate,
+                            observations: "Ninguna",
+                            assistanceCategoryId: 2,
+                            studentId: courseStudent.studentId,
+                            courseId: updatedCourse.id,
+                            qrId: result.id
+                        }
+                    })];
+            case 5:
                 _a.sent();
+                _a.label = 6;
+            case 6:
+                _i++;
+                return [3 /*break*/, 4];
+            case 7:
                 res.json({
                     status: "success",
                     data: result
                 });
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 9];
+            case 8:
                 error_3 = _a.sent();
                 console.log(error_3);
                 res.json({
                     status: "error",
                     message: error_3
                 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 9];
+            case 9: return [2 /*return*/];
         }
     });
 }); });
